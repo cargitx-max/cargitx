@@ -1,287 +1,313 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cargitx — Recompensas en línea (En construcción)</title>
-  <meta name="description" content="Cargitx: gana recompensas viendo anuncios, respondiendo encuestas, completando ofertas y más. Plataforma segura y confiable de incentivos digitales." />
-  <meta name="keywords" content="Cargitx, recompensas, ver anuncios, encuestas, ofertas, ganar puntos, canjear premios" />
-  <meta name="author" content="Cargitx" />
-  <link rel="icon" href="https://cargitx.com/logo/favico.png" type="image/png">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<title>CARGITX • Streaming Rewards</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+<meta name="description" content="Plataforma digital que integra transmisión en vivo e interacción de la audiencia dentro de un entorno único.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="app-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#050808">
 
-  <style>
-    :root{
-      --green: #00ffb3;
-      --gold:  #ffcc00;
-      --darkA: #0b0020;
-      --darkB: #140623;
-      --lightA: #ffffff;
-      --glass: rgba(255,255,255,0.06);
-      --card-radius: 18px;
-      --ease: 0.45s cubic-bezier(.2,.9,.3,1);
-      --maxw: 1200px;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      color: #0b0b0b;
-      background: linear-gradient(135deg,#f7f8fb,#eef2f6);
-      transition: background var(--ease), color var(--ease);
-      overflow-x: hidden;
-    }
-    body.dark{
-      background: radial-gradient(circle at 10% 10%, rgba(7,2,30,0.7), transparent 18%), linear-gradient(180deg,var(--darkA),var(--darkB));
-      color: #eef6f2;
-    }
+<style>
+:root {
+  --mint: #3ad6b2; --bgA: #050808; --bgB: #0b1210; --text: #ffffff;
+  --border-static: rgba(58, 214, 178, .2);
+  --card-bg-dark: rgba(12, 20, 18, 0.6); --card-bg-light: rgba(255, 255, 255, 0.85);
+  --neon-bg: rgba(0, 0, 0, 0.65);
+}
 
-    .page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 20px;position:relative;overflow:hidden}
-    .wrap{width:100%;max-width:var(--maxw);display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start;z-index:5;position:relative;margin:auto}
+body.light {
+  --bgA: #ffffff; --bgB: #ffffff; --text: #0b1613;
+  --border-static: rgba(0, 0, 0, .08); --mint: #00bf9a;
+  --card-bg-dark: #ffffff; --neon-bg: #f9f9f9;
+}
 
-    /* TOPBAR */
-    .topbar{position:fixed;left:20px;top:18px;display:flex;align-items:center;gap:12px;z-index:30}
-    .logo-mini{width:56px;height:56px;border-radius:12px;overflow:hidden;box-shadow:0 12px 36px rgba(0,0,0,0.06);border:2px solid rgba(0,255,179,0.08);background:#fff}
-    .logo-mini img{width:100%;height:100%;object-fit:cover;display:block}
-    .brand-name{font-family:Orbitron, sans-serif;color:var(--green);letter-spacing:1px;font-weight:600}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bgA), var(--bgB));
+  color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased;
+}
 
-    /* THEME SWITCH */
-    .theme-wrap{position:fixed;right:20px;top:18px;z-index:30}
-    .theme-btn{
-      width:72px;
-      height:38px;
-      border-radius:999px;
-      background:rgba(255,255,255,0.06);
-      display:flex;
-      align-items:center;
-      padding:4px;
-      cursor:pointer;
-      box-shadow:0 6px 18px rgba(2,6,23,0.06);
-    }
-    .theme-ball{
-      width:30px;
-      height:30px;
-      border-radius:50%;
-      background:#2b0a5a; /* morado oscuro en modo claro */
-      transition:transform .28s, background .28s;
-    }
-    body.dark .theme-ball{
-      transform:translateX(34px);
-      background:#00ffb3; /* verde neón en modo oscuro */
-    }
+canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; will-change: transform; }
 
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,252,0.92));
-      border-radius:calc(var(--card-radius) + 6px);
-      padding:36px;
-      box-shadow:0 28px 80px rgba(10,20,40,0.08);
-      border:1px solid rgba(5,10,20,0.03);
-      transition: background var(--ease), box-shadow var(--ease), transform .6s;
-      position:relative;overflow:hidden;
-    }
-    body.dark .card{
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border:1px solid rgba(255,255,255,0.04);
-      box-shadow:0 32px 110px rgba(0,0,0,0.45);
-    }
+/* HEADER & CONTROLS */
+.brand {
+  position: fixed; top: 26px; left: 5%; z-index: 20; padding: 14px 18px;
+  background: rgba(0, 0, 0, .55); border: 1px solid var(--border-static);
+  border-radius: 18px; backdrop-filter: blur(5px);
+}
+.brand img { height: 36px; display: block; }
 
-    .hero-left h1{
-      font-family: 'Orbitron', sans-serif;
-      font-size:34px;
-      margin:0 0 12px 0;
-      line-height:1.02;
-      background: linear-gradient(90deg,var(--green),var(--gold));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-    }
-    .hero-left p.lead{margin:0 0 18px 0;color:rgba(0,0,0,0.72);font-size:16px;}
-    body.dark .hero-left p.lead{color: rgba(238,246,242,0.92);}
+.controls { position: fixed; top: 26px; right: 5%; display: flex; gap: 12px; z-index: 20; }
+.theme-btn, .lang-btn {
+  padding: 12px 16px; border-radius: 16px; border: 1px solid var(--border-static);
+  background: rgba(0, 0, 0, .55); color: var(--mint); font-weight: 600;
+  cursor: pointer; backdrop-filter: blur(5px); text-decoration: none;
+}
+body.light .brand, body.light .theme-btn, body.light .lang-btn { background: #fff; }
 
-    .kpis{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
-    .kpi{background:rgba(0,0,0,0.04);padding:10px 14px;border-radius:10px;font-weight:600}
-    body.dark .kpi{background:rgba(255,255,255,0.03)}
+/* HERO SECTION */
+.hero { position: relative; z-index: 5; padding: clamp(120px, 15vh, 180px) 5% 80px; }
+.hero-block {
+  max-width: 1480px; 
+  margin: 0 auto; padding: clamp(32px, 5vw, 64px);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+}
 
-    .progress{margin-top:18px;height:12px;border-radius:999px;background:rgba(0,0,0,0.06);overflow:hidden;border:1px solid rgba(0,0,0,0.03)}
-    .progress .bar{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--gold));box-shadow:0 12px 36px rgba(0,255,179,0.08);transition:width 1.4s ease}
+.stream-box {
+  position: relative; z-index: 1; border-radius: 32px; overflow: hidden; transform: translateZ(0);
+}
+.stream-box::before {
+  content: ''; position: absolute; top: 50%; left: 50%; width: 200%; height: 200%;
+  z-index: -2; background: conic-gradient(from 0deg, transparent 40%, var(--mint) 100%);
+  animation: spin 4s linear infinite; will-change: transform;
+}
+.stream-box::after {
+  content: ''; position: absolute; inset: 2px; border-radius: inherit;
+  background: rgba(5, 8, 8, 0.85); backdrop-filter: blur(20px); z-index: -1;
+}
+body.light .stream-box::after { background: rgba(255, 255, 255, 0.85); }
 
-    .meta{display:flex;gap:12px;align-items:center;margin-top:14px;color:rgba(0,0,0,0.6)}
-    body.dark .meta{color:rgba(238,246,242,0.85)}
+@keyframes spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-    .features{margin-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    .feature{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(0,0,0,0.04);transition:transform .3s,box-shadow .3s}
-    .feature:hover{transform:translateY(-8px);box-shadow:0 30px 80px rgba(2,6,23,0.06)}
-    body.dark .feature{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03)}
+.hero-text h1 { font-family: 'Orbitron'; font-size: clamp(38px, 5vw, 68px); line-height: 1.1; margin-bottom: 24px; }
+.hero-text h1 span { color: var(--mint); }
+.hero-text p { font-size: 17px; opacity: .9; max-width: 540px; }
 
-    .feature h4{margin:0 0 8px 0;font-size:15px}
-    .feature p{margin:0;color:rgba(0,0,0,0.6)}
-    body.dark .feature p{color:rgba(238,246,242,0.86)}
+/* HERO RIGHT */
+.hero-right { display: flex; flex-direction: column; gap: 30px; justify-content: center; margin-top: -20px; }
+.hero-image img { width: 100%; max-height: 170px; object-fit: contain; }
 
-    .cta-row{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:12px;flex-wrap:wrap}
-    .badge{padding:10px 14px;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--gold));color:#021513;font-weight:700;box-shadow:0 14px 40px rgba(0,255,179,0.06)}
-    .ghost{padding:10px 14px;border-radius:12px;border:1px solid rgba(0,0,0,0.06);background:transparent;font-weight:600}
+.neon-line {
+  height: 14px; border-radius: 16px; overflow: hidden;
+  background: var(--neon-bg); border: 1px solid var(--border-static);
+  position: relative; transition: background 0.3s ease;
+}
+.neon-line::after {
+  content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, var(--mint), transparent);
+  animation: move 2.2s linear infinite;
+}
+@keyframes move { to { left: 100%; } }
 
-    footer.sitefoot{margin-top:18px;text-align:center;font-size:14px;color:rgba(0,0,0,0.6)}
-    body.dark footer.sitefoot{color:rgba(238,246,242,0.76)}
+.hero-status { display: flex; flex-wrap: wrap; gap: 12px; }
+.status {
+  flex: 1; min-width: 100px; padding: 14px 0; text-align: center; border-radius: 12px;
+  background: rgba(0, 0, 0, .55); border: 1px solid var(--border-static);
+  font-size: 11px; font-weight: 800; color: var(--mint); letter-spacing: 1px;
+}
+body.light .status { background: #fff; }
 
-    .aside{border-radius:14px;padding:18px;border:1px solid rgba(0,0,0,0.04);background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center}
-    body.dark .aside{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.04)}
-    .logo-holder{width:190px;height:190px;border-radius:18px;border:2px solid rgba(0,255,179,0.12);overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.02);transition:transform .45s}
-    .logo-holder img{width:100%;height:100%;object-fit:cover;display:block}
-    .logo-holder:hover{transform:translateY(-6px) rotateX(6deg)}
+/* CONTENT SECTIONS */
+.section { 
+  max-width: 1650px; 
+  margin: 0 auto 120px; padding: 0 5%; position: relative; z-index: 5; 
+}
 
-    .data-line{width:100%;height:8px;border-radius:999px;background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));overflow:hidden;display:block}
-    .data-line > i{display:block;height:100%;width:40%;background:linear-gradient(90deg,var(--green),var(--gold));box-shadow:0 8px 30px rgba(0,255,179,0.08);animation:slide 6s linear infinite}
-    @keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.tech-card {
+  position: relative; z-index: 1; background: var(--card-bg-dark);
+  border: 1px solid var(--border-static); backdrop-filter: blur(8px);
+  transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1), border-color 0.3s ease;
+  border-radius: 28px; padding: 36px;
+}
+.tech-card:hover { border-color: var(--mint); transform: translateY(-5px); }
 
-    canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+.state-grid, .blocks, .flow { display: grid; gap: 24px; margin-bottom: 60px; }
+.state-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.blocks { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.flow { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 
-    @media (max-width:980px){
-      .wrap{grid-template-columns:1fr;gap:20px;padding-bottom:60px}
-      .aside{order:-1}
-      .features{grid-template-columns:repeat(2,1fr)}
-    }
-    @media (max-width:560px){
-      .logo-holder{width:140px;height:140px}
-      .hero-left h1{font-size:26px}
-      .features{grid-template-columns:1fr}
-    }
-  </style>
+.state h3, .block h4 { font-family: 'Orbitron'; color: var(--mint); margin-bottom: 8px; font-size: 22px; }
+.state p, .block p { font-size: 15px; opacity: .85; line-height: 1.6; }
+
+/* NUEVO DISEÑO HORIZONTAL (Lado a Lado) */
+.flow-step { display: flex; align-items: center; gap: 15px; padding: 24px 30px; }
+.flow-step .text-box { 
+  display: flex; 
+  flex-direction: row; /* Lado a lado */
+  align-items: baseline; /* Alineados a la base del texto */
+  gap: 8px; /* Pegaditos */
+}
+/* Grueso */
+.flow-step strong { 
+  font-size: 18px; 
+  font-weight: 900; 
+  color: var(--text); 
+  letter-spacing: 0.5px;
+  font-family: 'Orbitron', sans-serif; /* Opcional: Fuente más técnica para el título */
+}
+/* Delgado */
+.flow-step span { 
+  font-size: 14px; 
+  font-weight: 300; 
+  opacity: 0.7; 
+}
+
+footer { text-align: center; padding: 60px 20px; font-size: 13px; opacity: .5; letter-spacing: 1px; }
+
+/* RESPONSIVE */
+@media(max-width: 900px) {
+  .hero-block { grid-template-columns: 1fr; text-align: center; }
+  .hero-right { order: -1; margin-top: 0; margin-bottom: 20px; }
+  .hero-text p { margin: 0 auto; }
+  .hero-status { justify-content: center; }
+}
+</style>
 </head>
 <body>
-  <canvas id="bgCanvas" aria-hidden="true"></canvas>
 
-  <div class="topbar">
-    <div class="logo-mini"><img src="https://cargitx.com/logo/favico.png" alt="Logo Cargitx"></div>
-    <div class="brand-name">CARGITX</div>
+<canvas id="bg"></canvas>
+
+<header>
+  <div class="brand"><img src="logo.png" alt="CARGITX"></div>
+  <div class="controls">
+    <a href="/en" class="lang-btn">EN</a>
+    <button class="theme-btn" id="theme" aria-label="Cambiar tema">☀</button>
   </div>
+</header>
 
-  <div class="theme-wrap">
-    <div class="theme-btn" id="themeBtn">
-      <div class="theme-ball"></div>
-    </div>
-  </div>
-
-  <main class="page">
-    <div class="wrap">
-
-      <section class="card">
-        <div class="hero-left">
-          <h1>Gana recompensas online</h1>
-          <p class="lead">Gana recompensas viendo anuncios, respondiendo encuestas, completando ofertas y más. Cargitx convierte tu actividad digital en valor real: puntos, niveles y premios.</p>
-
-          <div class="kpis">
-            <div class="kpi">Puntos instantáneos</div>
-            <div class="kpi">Retos y misiones</div>
-            <div class="kpi">Canje seguro</div>
-          </div>
-
-          <div class="progress"><div class="bar" id="progressBar"></div></div>
-
-          <div class="meta">
-            <div>🔒 Seguridad y privacidad</div>
-            <div style="opacity:.6">•</div>
-            <div>Experiencia multiplataforma</div>
-          </div>
-
-          <div class="features">
-            <div class="feature"><h4>Ver anuncios</h4><p>Gana puntos al ver anuncios verificados y ofertas patrocinadas.</p></div>
-            <div class="feature"><h4>Responder encuestas</h4><p>Participa y gana recompensas por tus opiniones.</p></div>
-            <div class="feature"><h4>Completar ofertas</h4><p>Ofertas exclusivas y tareas con recompensas claras.</p></div>
-            <div class="feature"><h4>Referidos</h4><p>Invita a amigos y gana bonificaciones.</p></div>
-            <div class="feature"><h4>Catálogo</h4><p>Canjea tus puntos por premios y descuentos.</p></div>
-            <div class="feature"><h4>Soporte</h4><p>Ayuda y políticas claras para usuarios.</p></div>
-          </div>
-
-          <div class="cta-row">
-            <div class="badge">Próximamente</div>
-            <div class="ghost">Docs & API (Próx.)</div>
-          </div>
-
-          <footer class="sitefoot">© <span id="year"></span> Cargitx • Innovando en recompensas digitales</footer>
+<main>
+  <section class="hero">
+    <div class="hero-block stream-box">
+      <div class="hero-text">
+        <h1><span>CARGITX</span><br>Streaming Rewards</h1>
+        <p>Plataforma digital que integra transmisión en vivo e interacción de la audiencia dentro de un entorno único, con procesos claros y seguimiento en tiempo real.</p>
+      </div>
+      <div class="hero-right">
+        <div class="hero-image"><img src="logo-rect.png" alt="CARGITX"></div>
+        <div class="neon-line"></div>
+        <div class="hero-status">
+          <div class="status">LIVE</div>
+          <div class="status">INTERACTION</div>
+          <div class="status">PLATFORM</div>
         </div>
-      </section>
-
-      <aside class="aside">
-        <div class="logo-holder"><img src="https://cargitx.com/logo/logo.png" alt="Logo Cargitx principal"></div>
-        <small></small>
-        <div class="data-line"><i></i></div>
-      </aside>
-
+      </div>
     </div>
-  </main>
+  </section>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+  <section class="section">
+    <div class="state-grid">
+      <article class="state tech-card">
+        <h3>Arquitectura de plataforma</h3>
+        <p>Infraestructura robusta para soportar transmisión continua y eventos simultáneos. Prioriza estabilidad operativa, control de procesos y una estructura preparada para escalar de forma ordenada.</p>
+      </article>
+      <article class="state tech-card">
+        <h3>Experiencia unificada</h3>
+        <p>Entorno único donde creadores y audiencia interactúan sin fricción. Gestión centralizada de la transmisión y la respuesta, manteniendo la coherencia en todo el ecosistema.</p>
+      </article>
+    </div>
 
-    setTimeout(()=> {
-      document.getElementById('progressBar').style.width = '88%';
-    }, 450);
+    <div class="blocks">
+      <div class="block tech-card">
+        <h4>Transmisión activa</h4>
+        <p>Canales en vivo con estabilidad y conexión directa. Diseño enfocado en la continuidad operativa y la visibilidad constante de la actividad.</p>
+      </div>
+      <div class="block tech-card">
+        <h4>Interacción visible</h4>
+        <p>Acciones reflejadas en la plataforma en tiempo real. Cada evento genera una respuesta clara, permitiendo el seguimiento y control inmediato dentro del entorno.</p>
+      </div>
+      <div class="block tech-card">
+        <h4>Recompensa integrada</h4>
+        <p>La participación genera valor interno gestionado por la plataforma. Este valor se integra totalmente como un elemento clave del flujo de interacción.</p>
+      </div>
+    </div>
 
-    const themeBtn = document.getElementById('themeBtn');
-    themeBtn.addEventListener('click', ()=>{
-      document.body.classList.toggle('dark');
-      const isDark = document.body.classList.contains('dark');
-      try{ localStorage.setItem('cargitx_theme', isDark ? 'dark' : 'light'); }catch(e){}
-    });
-    try{
-      const pref = localStorage.getItem('cargitx_theme');
-      if(pref === 'dark') document.body.classList.add('dark');
-    }catch(e){}
+    <div class="grid-steps flow">
+      <div class="flow-step tech-card">
+        <div class="text-box"><strong>STREAM</strong><span>Base operativa</span></div>
+      </div>
+      <div class="flow-step tech-card">
+        <div class="text-box"><strong>VIEWERS</strong><span>Participación</span></div>
+      </div>
+      <div class="flow-step tech-card">
+        <div class="text-box"><strong>INTERACTION</strong><span>Eventos</span></div>
+      </div>
+      <div class="flow-step tech-card">
+        <div class="text-box"><strong>REWARDS</strong><span>Valor interno</span></div>
+      </div>
+    </div>
+  </section>
+</main>
 
-    // Fondo animado: energía digital
-    (function(){
-      const canvas = document.getElementById('bgCanvas');
-      const ctx = canvas.getContext('2d');
-      let W = canvas.width = innerWidth;
-      let H = canvas.height = innerHeight;
-      window.addEventListener('resize', ()=> { W = canvas.width = innerWidth; H = canvas.height = innerHeight; init(); });
-      let particles = [], flows = [];
-      function rand(min,max){ return Math.random()*(max-min)+min; }
-      function init(){
-        particles = []; flows = [];
-        const PCOUNT = Math.max(40, Math.floor((W*H)/120000));
-        for(let i=0;i<PCOUNT;i++){
-          particles.push({x:Math.random()*W,y:Math.random()*H,r:rand(0.6,2.1),vx:rand(-0.25,0.25),vy:rand(-0.25,0.25),alpha:rand(0.05,0.5),hue:150+Math.random()*70});
-        }
-        const FCOUNT = 5 + Math.floor(W/500);
-        for(let i=0;i<FCOUNT;i++){
-          flows.push({x:Math.random()*W,y:Math.random()*H,amp:rand(60,220),speed:rand(0.3,1.0),hue:150+Math.random()*80,t:Math.random()*9999});
-        }
-      }
-      init();
-      function drawFlow(f){
-        ctx.beginPath();
-        const grad = ctx.createLinearGradient(f.x-200, f.y-200, f.x+200, f.y+200);
-        grad.addColorStop(0, `hsla(${f.hue},85%,60%,0.03)`);
-        grad.addColorStop(0.5, `hsla(${f.hue+20},95%,55%,0.09)`);
-        grad.addColorStop(1, `hsla(${f.hue+40},80%,40%,0.02)`);
-        ctx.fillStyle = grad;
-        const px = f.x + Math.sin(f.t*0.002)*f.amp;
-        const py = (f.y + Math.cos(f.t*0.001)*f.amp*0.3) % H;
-        ctx.ellipse(px, py, f.amp, 60, Math.sin(f.t*0.001)*0.2, 0, Math.PI*2);
-        ctx.fill();
-      }
-      function draw(){
-        if(document.body.classList.contains('dark')) ctx.fillStyle = 'rgba(6,4,18,0.45)';
-        else ctx.fillStyle = 'rgba(248,250,253,0.85)';
-        ctx.fillRect(0,0,W,H);
-        for(let f of flows){ f.t += f.speed; drawFlow(f); }
-        for(let p of particles){
-          p.x += p.vx; p.y += p.vy;
-          if(p.x<0)p.x=W; if(p.x>W)p.x=0; if(p.y<0)p.y=H; if(p.y>H)p.y=0;
-          ctx.beginPath();
-          ctx.fillStyle = `hsla(${p.hue},100%,70%,${p.alpha})`;
-          ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-          ctx.fill();
-        }
-        requestAnimationFrame(draw);
-      }
-      draw();
-    })();
-  </script>
+<footer>© <span id="year"></span> CARGITX — TODOS LOS DERECHOS RESERVADOS</footer>
+
+<script>
+// --- GESTIÓN DE TEMA CON MEMORIA SEGURA ---
+// Usamos localStorage para compartir entre /index y /en/
+// Pero el script de fondo está diseñado para adaptarse automáticamente
+
+const themeBtn = document.getElementById('theme');
+const bodyElement = document.body;
+
+// 1. Al cargar: Verificamos memoria
+const savedTheme = localStorage.getItem('cargitx_theme_v2'); // Clave única
+if (savedTheme === 'light') {
+  bodyElement.classList.add('light');
+  themeBtn.textContent = '🌙';
+} else {
+  themeBtn.textContent = '☀';
+}
+
+// 2. Al hacer clic: Cambiamos y guardamos
+themeBtn.addEventListener('click', () => {
+  const isLight = bodyElement.classList.toggle('light');
+  themeBtn.textContent = isLight ? '🌙' : '☀';
+  localStorage.setItem('cargitx_theme_v2', isLight ? 'light' : 'dark');
+});
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// --- FONDO ANIMADO (A PRUEBA DE FALLOS) ---
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d', { alpha: true });
+let w, h, particles = [];
+
+function initParticles() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+  const count = w < 600 ? 15 : 35; 
+  particles = Array.from({ length: count }, () => ({
+    x: Math.random() * w, 
+    y: Math.random() * h,
+    s: Math.random() * 3 + 2,     
+    l: Math.random() * 250 + 100,
+    w: Math.random() * 1.5 + 0.5
+  }));
+}
+
+function animateParticles() {
+  // CLAVE: Leemos el estado del cuerpo EN VIVO (cada frame)
+  // Esto asegura que si localStorage cambia el tema, el fondo se adapta al instante
+  // sin romperse ni necesitar recarga.
+  const isLightMode = document.body.classList.contains('light');
+  
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = isLightMode ? "rgba(100, 116, 112, 0.15)" : "rgba(58, 214, 178, 0.2)";
+  
+  for(let p of particles) {
+    p.y -= p.s;
+    if (p.y < -p.l) { 
+      p.y = h + p.l;
+      p.x = Math.random() * w;
+    }
+    ctx.fillRect(p.x, p.y, p.w, p.l);
+  }
+  requestAnimationFrame(animateParticles);
+}
+
+window.addEventListener('resize', () => { 
+  clearTimeout(window.rt); 
+  window.rt = setTimeout(initParticles, 200); 
+});
+initParticles();
+animateParticles();
+</script>
 </body>
 </html>
