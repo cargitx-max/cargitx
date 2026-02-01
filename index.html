@@ -56,7 +56,7 @@ body.light .brand, body.light .theme-btn, body.light .lang-btn { background: #ff
 /* HERO SECTION */
 .hero { position: relative; z-index: 5; padding: clamp(120px, 15vh, 180px) 5% 80px; }
 .hero-block {
-  max-width: 1480px; 
+  max-width: 1480px; /* Ancho amplio PC */
   margin: 0 auto; padding: clamp(32px, 5vw, 64px);
   display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
 }
@@ -107,7 +107,7 @@ body.light .status { background: #fff; }
 
 /* CONTENT SECTIONS */
 .section { 
-  max-width: 1650px; 
+  max-width: 1650px; /* Alineado con Hero */
   margin: 0 auto 120px; padding: 0 5%; position: relative; z-index: 5; 
 }
 
@@ -127,13 +127,20 @@ body.light .status { background: #fff; }
 .state h3, .block h4 { font-family: 'Orbitron'; color: var(--mint); margin-bottom: 8px; font-size: 22px; }
 .state p, .block p { font-size: 15px; opacity: .85; line-height: 1.6; }
 
-/* DISEÑO HORIZONTAL (Lado a Lado) */
-.flow-step { display: flex; align-items: center; gap: 15px; padding: 24px 30px; }
+/* --- DISEÑO HORIZONTAL FORZADO --- */
+.flow-step { 
+  display: flex; 
+  align-items: center; 
+  gap: 15px; 
+  padding: 24px 30px; 
+  overflow: hidden; /* Evita desbordes */
+}
 .flow-step .text-box { 
   display: flex; 
-  flex-direction: row; 
+  flex-direction: row; /* Siempre fila */
   align-items: baseline; 
   gap: 10px; 
+  white-space: nowrap; /* Fuerza una sola línea */
 }
 .flow-step strong { 
   font-size: 18px; 
@@ -148,16 +155,19 @@ body.light .status { background: #fff; }
   opacity: 0.7; 
 }
 
+/* Ajuste móvil para que no se rompa si la pantalla es muy pequeña */
+@media(max-width: 450px) {
+  .flow-step strong { font-size: 16px; }
+  .flow-step span { font-size: 12px; }
+}
+
 footer { text-align: center; padding: 60px 20px; font-size: 13px; opacity: .5; letter-spacing: 1px; }
 
-/* RESPONSIVE */
 @media(max-width: 900px) {
   .hero-block { grid-template-columns: 1fr; text-align: center; }
   .hero-right { order: -1; margin-top: 0; margin-bottom: 20px; }
   .hero-text p { margin: 0 auto; }
   .hero-status { justify-content: center; }
-  /* En móvil, si no caben, que bajen */
-  .flow-step .text-box { flex-wrap: wrap; }
 }
 </style>
 </head>
@@ -239,29 +249,19 @@ footer { text-align: center; padding: 60px 20px; font-size: 13px; opacity: .5; l
 <footer>© <span id="year"></span> CARGITX — TODOS LOS DERECHOS RESERVADOS</footer>
 
 <script>
-// --- GESTIÓN DE TEMA PERSISTENTE (localStorage) ---
+// --- SIN MEMORIA (Resetea al recargar) ---
 const themeBtn = document.getElementById('theme');
 const bodyElement = document.body;
+themeBtn.textContent = '☀';
 
-// 1. Verificar memoria al cargar
-const savedTheme = localStorage.getItem('cargitx_theme_v2'); 
-if (savedTheme === 'light') {
-  bodyElement.classList.add('light');
-  themeBtn.textContent = '🌙';
-} else {
-  themeBtn.textContent = '☀';
-}
-
-// 2. Botón cambiar
 themeBtn.addEventListener('click', () => {
   const isLight = bodyElement.classList.toggle('light');
   themeBtn.textContent = isLight ? '🌙' : '☀';
-  localStorage.setItem('cargitx_theme_v2', isLight ? 'light' : 'dark');
 });
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// --- FONDO ANIMADO DE ALTA VISIBILIDAD ---
+// --- FONDO ANIMADO ---
 const canvas = document.getElementById('bg');
 const ctx = canvas.getContext('2d', { alpha: true });
 let w, h, particles = [];
@@ -269,15 +269,14 @@ let w, h, particles = [];
 function initParticles() {
   w = canvas.width = window.innerWidth;
   h = canvas.height = window.innerHeight;
-  // Menos cantidad para no saturar, ya que son más visibles
-  const count = w < 600 ? 12 : 25; 
+  const count = w < 600 ? 15 : 30; 
   
   particles = Array.from({ length: count }, () => ({
     x: Math.random() * w, 
     y: Math.random() * h,
     s: Math.random() * 3 + 2,     
     l: Math.random() * 250 + 100,
-    w: Math.random() * 2.0 + 1.0 // Un poco más gruesas para visibilidad
+    w: Math.random() * 1.0 + 0.5 // MÁS FINO y ligero
   }));
 }
 
@@ -286,13 +285,14 @@ function animateParticles() {
   
   ctx.clearRect(0, 0, w, h);
   
-  // AQUÍ ESTÁ EL CAMBIO DE VISIBILIDAD:
+  // COLOR: 
   if (isLightMode) {
-    // Modo Claro: Color oscuro semitransparente para alto contraste con blanco
-    ctx.fillStyle = "rgba(20, 40, 35, 0.35)"; 
+    // Verde menta visible (un poco más oscuro para que se vea en blanco)
+    // pero manteniendo el tono de la marca
+    ctx.fillStyle = "rgba(0, 180, 150, 0.4)"; 
   } else {
-    // Modo Oscuro: Mint brillante con más opacidad (0.45)
-    ctx.fillStyle = "rgba(58, 214, 178, 0.45)";
+    // Verde menta brillante original
+    ctx.fillStyle = "rgba(58, 214, 178, 0.35)";
   }
   
   for(let p of particles) {
