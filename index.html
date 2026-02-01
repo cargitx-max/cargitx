@@ -133,14 +133,14 @@ body.light .status { background: #fff; }
   align-items: center; 
   gap: 15px; 
   padding: 24px 30px; 
-  overflow: hidden; /* Evita desbordes */
+  overflow: hidden; 
 }
 .flow-step .text-box { 
   display: flex; 
   flex-direction: row; /* Siempre fila */
   align-items: baseline; 
   gap: 10px; 
-  white-space: nowrap; /* Fuerza una sola línea */
+  white-space: nowrap; 
 }
 .flow-step strong { 
   font-size: 18px; 
@@ -155,7 +155,6 @@ body.light .status { background: #fff; }
   opacity: 0.7; 
 }
 
-/* Ajuste móvil para que no se rompa si la pantalla es muy pequeña */
 @media(max-width: 450px) {
   .flow-step strong { font-size: 16px; }
   .flow-step span { font-size: 12px; }
@@ -249,14 +248,25 @@ footer { text-align: center; padding: 60px 20px; font-size: 13px; opacity: .5; l
 <footer>© <span id="year"></span> CARGITX — TODOS LOS DERECHOS RESERVADOS</footer>
 
 <script>
-// --- SIN MEMORIA (Resetea al recargar) ---
+// --- TEMA CON MEMORIA ROBUSTA (A PRUEBA DE FALLOS) ---
 const themeBtn = document.getElementById('theme');
 const bodyElement = document.body;
-themeBtn.textContent = '☀';
 
+// 1. Leer LocalStorage al iniciar
+// Usamos una clave única "cargitx_theme_final"
+const savedTheme = localStorage.getItem('cargitx_theme_final');
+if (savedTheme === 'light') {
+  bodyElement.classList.add('light');
+  themeBtn.textContent = '🌙';
+} else {
+  themeBtn.textContent = '☀';
+}
+
+// 2. Guardar al hacer clic
 themeBtn.addEventListener('click', () => {
   const isLight = bodyElement.classList.toggle('light');
   themeBtn.textContent = isLight ? '🌙' : '☀';
+  localStorage.setItem('cargitx_theme_final', isLight ? 'light' : 'dark');
 });
 
 document.getElementById('year').textContent = new Date().getFullYear();
@@ -276,23 +286,23 @@ function initParticles() {
     y: Math.random() * h,
     s: Math.random() * 3 + 2,     
     l: Math.random() * 250 + 100,
-    w: Math.random() * 1.0 + 0.5 // MÁS FINO y ligero
+    w: Math.random() * 1.0 + 0.5 // Fino y ligero
   }));
 }
 
 function animateParticles() {
+  // Leemos la clase DIRECTAMENTE del body en cada frame.
+  // Esto asegura que el fondo reaccione instantáneamente a la memoria o al clic.
   const isLightMode = document.body.classList.contains('light');
   
   ctx.clearRect(0, 0, w, h);
   
-  // COLOR: 
+  // COLOR: Igual que el oscuro (Mint), pero ajustado el alpha para que se vea bien en blanco.
+  // No es verde oscuro, es el mismo tono "Mint" de la marca.
   if (isLightMode) {
-    // Verde menta visible (un poco más oscuro para que se vea en blanco)
-    // pero manteniendo el tono de la marca
-    ctx.fillStyle = "rgba(0, 180, 150, 0.4)"; 
+    ctx.fillStyle = "rgba(0, 160, 140, 0.4)"; // Mint visible sobre blanco
   } else {
-    // Verde menta brillante original
-    ctx.fillStyle = "rgba(58, 214, 178, 0.35)";
+    ctx.fillStyle = "rgba(58, 214, 178, 0.35)"; // Mint brillante sobre negro
   }
   
   for(let p of particles) {
