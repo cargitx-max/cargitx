@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<title>CARGITX • Streaming Rewards</title>
+
+<meta name="description" content="Digital platform integrating live streaming and audience interaction within a unified environment.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="apple-touch-icon" href="../app-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#050808">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --mint: #3ad6b2; --bgA: #050808; --bgB: #0b1210; --text: #ffffff;
+  --border-static: rgba(58, 214, 178, .2);
+  --card-bg-dark: rgba(12, 20, 18, 0.6); --card-bg-light: rgba(255, 255, 255, 0.85);
+  --neon-bg: rgba(0, 0, 0, 0.65);
+}
+
+body.light {
+  --bgA: #ffffff; --bgB: #ffffff; --text: #0b1613;
+  --border-static: rgba(0, 0, 0, .08); --mint: #00bf9a;
+  --card-bg-dark: #ffffff; --neon-bg: #f9f9f9;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bgA), var(--bgB));
+  color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased;
+}
+
+canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; will-change: transform; }
+
+/* HEADER & CONTROLS */
+.brand {
+  position: fixed; top: 26px; left: 5%; z-index: 20; padding: 14px 18px;
+  background: rgba(0, 0, 0, .55); border: 1px solid var(--border-static);
+  border-radius: 18px; backdrop-filter: blur(5px);
+}
+.brand img { height: 36px; display: block; }
+
+.controls { position: fixed; top: 26px; right: 5%; display: flex; gap: 12px; z-index: 20; }
+.theme-btn, .lang-btn {
+  padding: 12px 16px; border-radius: 16px; border: 1px solid var(--border-static);
+  background: rgba(0, 0, 0, .55); color: var(--mint); font-weight: 600;
+  cursor: pointer; backdrop-filter: blur(5px); text-decoration: none;
+}
+body.light .brand, body.light .theme-btn, body.light .lang-btn { background: #fff; }
+
+/* HERO SECTION */
+.hero { position: relative; z-index: 5; padding: clamp(120px, 15vh, 180px) 5% 80px; }
+.hero-block {
+  max-width: 1480px; 
+  margin: 0 auto; padding: clamp(32px, 5vw, 64px);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+}
+
+.stream-box {
+  position: relative; z-index: 1; border-radius: 32px; overflow: hidden; transform: translateZ(0);
+}
+.stream-box::before {
+  content: ''; position: absolute; top: 50%; left: 50%; width: 200%; height: 200%;
+  z-index: -2; background: conic-gradient(from 0deg, transparent 40%, var(--mint) 100%);
+  animation: spin 4s linear infinite; will-change: transform;
+}
+.stream-box::after {
+  content: ''; position: absolute; inset: 2px; border-radius: inherit;
+  background: rgba(5, 8, 8, 0.85); backdrop-filter: blur(20px); z-index: -1;
+}
+body.light .stream-box::after { background: rgba(255, 255, 255, 0.85); }
+
+@keyframes spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+.hero-text h1 { font-family: 'Orbitron'; font-size: clamp(38px, 5vw, 68px); line-height: 1.1; margin-bottom: 24px; }
+.hero-text h1 span { color: var(--mint); }
+.hero-text p { font-size: 17px; opacity: .9; max-width: 540px; }
+
+/* HERO RIGHT */
+.hero-right { display: flex; flex-direction: column; gap: 30px; justify-content: center; margin-top: -20px; }
+.hero-image img { width: 100%; max-height: 170px; object-fit: contain; }
+
+.neon-line {
+  height: 14px; border-radius: 16px; overflow: hidden;
+  background: var(--neon-bg); border: 1px solid var(--border-static);
+  position: relative; transition: background 0.3s ease;
+}
+.neon-line::after {
+  content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, var(--mint), transparent);
+  animation: move 2.2s linear infinite;
+}
+@keyframes move { to { left: 100%; } }
+
+.hero-status { display: flex; flex-wrap: wrap; gap: 12px; }
+.status {
+  flex: 1; min-width: 100px; padding: 14px 0; text-align: center; border-radius: 12px;
+  background: rgba(0, 0, 0, .55); border: 1px solid var(--border-static);
+  font-size: 11px; font-weight: 800; color: var(--mint); letter-spacing: 1px;
+}
+body.light .status { background: #fff; }
+
+/* CONTENT SECTIONS */
+.section { 
+  max-width: 1650px; 
+  margin: 0 auto 120px; padding: 0 5%; position: relative; z-index: 5; 
+}
+
+.tech-card {
+  position: relative; z-index: 1; background: var(--card-bg-dark);
+  border: 1px solid var(--border-static); backdrop-filter: blur(8px);
+  transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1), border-color 0.3s ease;
+  border-radius: 28px; padding: 36px;
+}
+.tech-card:hover { border-color: var(--mint); transform: translateY(-5px); }
+
+.state-grid, .blocks, .flow { display: grid; gap: 24px; margin-bottom: 60px; }
+.state-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.blocks { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.flow { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+.state h3, .block h4 { font-family: 'Orbitron'; color: var(--mint); margin-bottom: 8px; font-size: 22px; }
+.state p, .block p { font-size: 15px; opacity: .85; line-height: 1.6; }
+
+/* --- HORIZONTAL LAYOUT FORCED --- */
+.flow-step { 
+  display: flex; 
+  align-items: center; 
+  gap: 15px; 
+  padding: 24px 30px; 
+  overflow: hidden; 
+}
+.flow-step .text-box { 
+  display: flex; 
+  flex-direction: row; 
+  align-items: baseline; 
+  gap: 10px; 
+  white-space: nowrap; 
+}
+.flow-step strong { 
+  font-size: 18px; 
+  font-weight: 900; 
+  color: var(--text); 
+  letter-spacing: 0.5px;
+  font-family: 'Orbitron', sans-serif;
+}
+.flow-step span { 
+  font-size: 14px; 
+  font-weight: 400; 
+  opacity: 0.7; 
+}
+
+@media(max-width: 450px) {
+  .flow-step strong { font-size: 16px; }
+  .flow-step span { font-size: 12px; }
+}
+
+footer { text-align: center; padding: 60px 20px; font-size: 13px; opacity: .5; letter-spacing: 1px; }
+
+@media(max-width: 900px) {
+  .hero-block { grid-template-columns: 1fr; text-align: center; }
+  .hero-right { order: -1; margin-top: 0; margin-bottom: 20px; }
+  .hero-text p { margin: 0 auto; }
+  .hero-status { justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<header>
+  <div class="brand"><img src="../logo.png" alt="CARGITX"></div>
+  <div class="controls">
+    <a href="/" class="lang-btn">ES</a>
+    <button class="theme-btn" id="theme" aria-label="Toggle theme">☀</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-block stream-box">
+      <div class="hero-text">
+        <h1><span>CARGITX</span><br>Streaming Rewards</h1>
+        <p>Digital platform integrating live streaming and audience interaction within a unified environment, featuring clear processes and real-time tracking.</p>
+      </div>
+      <div class="hero-right">
+        <div class="hero-image"><img src="../logo-rect.png" alt="CARGITX"></div>
+        <div class="neon-line"></div>
+        <div class="hero-status">
+          <div class="status">LIVE</div>
+          <div class="status">INTERACTION</div>
+          <div class="status">PLATFORM</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="state-grid">
+      <article class="state tech-card">
+        <h3>Platform Architecture</h3>
+        <p>Robust infrastructure supporting continuous streaming and simultaneous events. Prioritizing operational stability, process control, and a structure built for organized scaling.</p>
+      </article>
+      <article class="state tech-card">
+        <h3>Unified Experience</h3>
+        <p>A single environment where creators and audiences interact without friction. Centralized management of streaming and response, maintaining coherence across the entire ecosystem.</p>
+      </article>
+    </div>
+
+    <div class="blocks">
+      <div class="block tech-card">
+        <h4>Active Streaming</h4>
+        <p>Live channels with stability and direct connection. Designed for operational continuity and constant activity visibility.</p>
+      </div>
+      <div class="block tech-card">
+        <h4>Visible Interaction</h4>
+        <p>Actions reflected on the platform in real-time. Each event generates a clear response, allowing for immediate tracking and control within the environment.</p>
+      </div>
+      <div class="block tech-card">
+        <h4>Integrated Rewards</h4>
+        <p>Participation generates internal value managed by the platform. This value is fully integrated as a key element of the interaction flow.</p>
+      </div>
+    </div>
+
+    <div class="grid-steps flow">
+      <div class="flow-step tech-card">
+        <div class="text-box"><strong>STREAM</strong><span>Operational Base</span></div>
+      </div>
+      <div class="flow-step tech-card">
+        <div class="text-box"><strong>VIEWERS</strong><span>Participation</span></div>
+      </div>
+      <div class="flow-step tech-card">
+        <div class="text-box"><strong>INTERACTION</strong><span>Events</span></div>
+      </div>
+      <div class="flow-step tech-card">
+        <div class="text-box"><strong>REWARDS</strong><span>Internal Value</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> CARGITX — ALL RIGHTS RESERVED</footer>
+
+<script>
+// --- SHARED MEMORY (ROBUST) ---
+const themeBtn = document.getElementById('theme');
+const bodyElement = document.body;
+
+const savedTheme = localStorage.getItem('cargitx_theme_final');
+if (savedTheme === 'light') {
+  bodyElement.classList.add('light');
+  themeBtn.textContent = '🌙';
+} else {
+  themeBtn.textContent = '☀';
+}
+
+themeBtn.addEventListener('click', () => {
+  const isLight = bodyElement.classList.toggle('light');
+  themeBtn.textContent = isLight ? '🌙' : '☀';
+  localStorage.setItem('cargitx_theme_final', isLight ? 'light' : 'dark');
+});
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// --- ANIMATED BACKGROUND ---
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d', { alpha: true });
+let w, h, particles = [];
+
+function initParticles() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+  const count = w < 600 ? 15 : 30; 
+  
+  particles = Array.from({ length: count }, () => ({
+    x: Math.random() * w, 
+    y: Math.random() * h,
+    s: Math.random() * 3 + 2,     
+    l: Math.random() * 250 + 100,
+    w: Math.random() * 1.0 + 0.5 
+  }));
+}
+
+function animateParticles() {
+  const isLightMode = document.body.classList.contains('light');
+  
+  ctx.clearRect(0, 0, w, h);
+  
+  if (isLightMode) {
+    ctx.fillStyle = "rgba(0, 160, 140, 0.4)"; 
+  } else {
+    ctx.fillStyle = "rgba(58, 214, 178, 0.35)";
+  }
+  
+  for(let p of particles) {
+    p.y -= p.s;
+    if (p.y < -p.l) { 
+      p.y = h + p.l;
+      p.x = Math.random() * w;
+    }
+    ctx.fillRect(p.x, p.y, p.w, p.l);
+  }
+  requestAnimationFrame(animateParticles);
+}
+
+window.addEventListener('resize', () => { 
+  clearTimeout(window.rt); 
+  window.rt = setTimeout(initParticles, 200); 
+});
+initParticles();
+animateParticles();
+</script>
+</body>
+</html>
