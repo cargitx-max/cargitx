@@ -1,1 +1,344 @@
+<!DOCTYPE html>
+<html lang="es" translate="no">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="google" content="notranslate" />
+    
+    <meta name="description" content="Plataforma digital que integra transmisión en vivo e interacción de la audiencia.">
+    <meta name="keywords" content="streaming, gamer, recompensas, plataforma, en vivo">
+    <title>CARGITX • Streaming Rewards</title>
+    
+    <meta name="theme-color" content="#050808">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="assets/logo-icon.png"> 
+    <link rel="icon" type="image/png" href="assets/favicon.png">
 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+/* --- VARIABLES --- */
+:root {
+  --mint: #3ad6b2;
+  --bg: #050808;
+  --card-bg: #111413;
+  --text: #ffffff;
+  --text-muted: #889995;
+  --border: #232b28;
+  --highlight: #1a211f;
+  --line-base: rgba(58, 214, 178, 0.2);
+  --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  --hud-glow: 0 0 15px rgba(58, 214, 178, 0.25), 0 4px 10px rgba(0,0,0,0.2);
+  --text-glow: 0 0 8px rgba(58, 214, 178, 0.3);
+  --container-width: 1700px;
+  --radius-lg: 24px;
+  --radius-md: 18px;
+}
+
+body.light {
+  --bg: #ffffff;
+  --card-bg: #ffffff;
+  --text: #0b1613;
+  --text-muted: #5a6663;
+  --border: #edf2f0;
+  --mint: #25cba8;
+  --highlight: #ffffff;
+  --line-base: rgba(37, 203, 168, 0.2);
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  --hud-glow: 0 0 8px rgba(37, 203, 168, 0.15), 0 2px 4px rgba(0,0,0,0.05);
+  --text-glow: 0 0 0 rgba(0,0,0,0); 
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Optimización Fuentes */
+h1, h3, h4 { font-display: swap; }
+
+#rain-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+/* HEADER */
+header {
+  position: fixed; top: 0; left: 0; width: 100%; padding: 20px 4%;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  z-index: 100; pointer-events: none;
+}
+
+.brand-box, .controls-container {
+  pointer-events: auto; background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 14px; box-shadow: var(--hud-glow); display: flex; align-items: center;
+  transition: box-shadow 0.3s ease;
+}
+.brand-box { padding: 14px 20px; }
+.brand-box img { height: 24px; display: block; width: auto; }
+.controls-container { padding: 10px 0; gap: 0; }
+.lang-link {
+  color: var(--mint); text-decoration: none; font-weight: 800; font-size: 14px; padding: 0 20px;
+  font-family: 'Orbitron', sans-serif; text-shadow: var(--text-glow);
+}
+.ctrl-separator { width: 1px; height: 20px; background-color: var(--border); }
+.theme-btn {
+  background: transparent; border: none; cursor: pointer; padding: 0 20px;
+  display: flex; align-items: center; justify-content: center; color: var(--mint);
+  filter: drop-shadow(0 0 1px rgba(58, 214, 178, 0.4));
+}
+.icon-svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sun-icon { display: block; } .moon-icon { display: none; }
+body.light .sun-icon { display: none; } body.light .moon-icon { display: block; }
+
+@media (min-width: 1024px) {
+  .brand-box { padding: 18px 28px; } .brand-box img { height: 32px; }
+  .controls-container { padding: 14px 0; } .lang-link { font-size: 16px; padding: 0 26px; }
+  .theme-btn { padding: 0 26px; } .icon-svg { width: 26px; height: 26px; }
+  .ctrl-separator { height: 28px; }
+}
+
+/* LAYOUT */
+.main-wrapper {
+  max-width: var(--container-width); margin: 0 auto;
+  /* AJUSTE HERO: Reducido de 140px a 110px para subir el contenido */
+  padding: clamp(110px, 12vh, 160px) 4% 60px;
+  position: relative; z-index: 1;
+}
+
+/* HERO */
+.hero-card {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: clamp(40px, 5vw, 80px); display: grid; grid-template-columns: 1.4fr 1fr; gap: 80px; align-items: center;
+  margin-bottom: 100px; box-shadow: var(--card-shadow); contain: content;
+}
+.hero-left h1 {
+  font-family: 'Orbitron', sans-serif; font-size: clamp(34px, 5vw, 72px);
+  line-height: 1.05; margin-bottom: 24px; font-weight: 900; letter-spacing: -1.5px;
+}
+.hero-left h1 span { color: var(--mint); }
+.hero-left p { font-size: clamp(15px, 1.2vw, 18px); color: var(--text-muted); font-weight: 400; max-width: 600px; line-height: 1.6; }
+.hero-right { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.hero-img { width: 100%; max-width: 360px; height: auto; object-fit: contain; }
+
+.scanner-line {
+  width: 100%; max-width: 360px; height: 8px; background: var(--line-base); border-radius: 4px;
+  position: relative; overflow: hidden; margin-bottom: 10px; box-shadow: 0 0 10px rgba(58, 214, 178, 0.2);
+}
+.scanner-line::after {
+  content: ''; position: absolute; top: 0; left: 0; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, var(--mint), transparent);
+  animation: scan-move 2.5s ease-in-out infinite;
+}
+@keyframes scan-move { 0% { transform: translateX(-150%); } 100% { transform: translateX(300%); } }
+
+.status-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; width: 100%; }
+.status-pill {
+  padding: 10px 20px; border-radius: 10px; background: var(--highlight); border: 1px solid var(--border);
+  font-size: 11px; font-weight: 800; color: var(--mint); font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
+  flex: 0 1 auto; white-space: nowrap;
+}
+body.light .status-pill { background: #ffffff; border-color: var(--mint); }
+
+/* GRIDS */
+.grid-container { display: grid; width: 100%; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); gap: 60px; margin-bottom: 60px; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); gap: 50px; margin-bottom: 60px; }
+.grid-4 { grid-template-columns: repeat(4, 1fr); gap: 40px; margin-bottom: 40px; }
+
+/* CARDS */
+.info-card {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: 40px; height: 100%; box-shadow: var(--card-shadow); contain: paint;
+}
+.info-card h3, .info-card h4 {
+  font-family: 'Orbitron'; color: var(--mint); margin-bottom: 16px; font-size: 22px; letter-spacing: -0.5px;
+}
+.info-card p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+
+.flow-card { padding: 30px; display: flex; align-items: center; overflow: hidden; }
+.flow-content { width: 100%; display: flex; flex-direction: row; justify-content: space-between; align-items: baseline; gap: 8px; white-space: nowrap; }
+.flow-title { font-family: 'Orbitron'; font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: 0.5px; }
+.flow-desc { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+footer { text-align: center; padding: 40px 0; font-size: 12px; color: var(--text-muted); border: none; margin-top: 20px; font-weight: 500; letter-spacing: 0.5px; }
+
+/* RESPONSIVE */
+@media (max-width: 1400px) { .grid-2, .grid-3 { gap: 40px; } }
+@media (max-width: 1200px) { 
+  .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 30px; } 
+  .grid-2, .grid-3 { gap: 30px; }
+}
+@media (max-width: 900px) {
+  .hero-card { display: flex; flex-direction: column-reverse; text-align: center; gap: 40px; padding: 40px 24px; margin-bottom: 60px; }
+  .hero-left p { margin: 0 auto; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 30px; margin-bottom: 40px; }
+  .scanner-line { margin: 0 auto 10px; }
+}
+@media (max-width: 600px) { 
+  .grid-4 { grid-template-columns: 1fr; }
+  .hero-left h1 { font-size: 32px; }
+  .brand-box { padding: 12px 16px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="rain-bg"></canvas>
+
+<header>
+  <div class="brand-box">
+    <img src="assets/logo.png" alt="CARGITX">
+  </div>
+  <div class="controls-container">
+    <a href="en.html" class="lang-link">EN</a>
+    <div class="ctrl-separator"></div>
+    <button class="theme-btn" id="theme" aria-label="Cambiar tema">
+      <svg class="icon-svg sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      <svg class="icon-svg moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+  </div>
+</header>
+
+<main class="main-wrapper">
+  <section class="hero-card" aria-label="Introducción">
+    <div class="hero-left">
+      <h1><span>CARGITX</span><br>Streaming Rewards</h1>
+      <p>Plataforma digital que integra transmisión en vivo e interacción de la audiencia dentro de un entorno único, con procesos claros y seguimiento en tiempo real.</p>
+    </div>
+    <div class="hero-right">
+      <img src="assets/logo-rect.png" alt="Plataforma CARGITX" class="hero-img">
+      <div class="scanner-line"></div>
+      <div class="status-row">
+        <div class="status-pill">LIVE</div>
+        <div class="status-pill">INTERACTION</div>
+        <div class="status-pill">PLATFORM</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid-container grid-2" aria-label="Arquitectura">
+    <article class="info-card">
+      <h3>Arquitectura de plataforma</h3>
+      <p>Infraestructura robusta para soportar transmisión continua y eventos simultáneos. Prioriza estabilidad operativa, control de procesos y una estructura preparada para escalar de forma ordenada.</p>
+    </article>
+    <article class="info-card">
+      <h3>Experiencia unificada</h3>
+      <p>Entorno único donde creadores y audiencia interactúan sin fricción. Gestión centralizada de la transmisión y la respuesta, manteniendo la coherencia en todo el ecosistema.</p>
+    </article>
+  </section>
+
+  <section class="grid-container grid-3" aria-label="Características">
+    <div class="info-card">
+      <h4>Transmisión activa</h4>
+      <p>Canales en vivo con estabilidad y conexión directa. Diseño enfocado en la continuidad operativa y la visibilidad constante de la actividad.</p>
+    </div>
+    <div class="info-card">
+      <h4>Interacción visible</h4>
+      <p>Acciones reflejadas en la plataforma en tiempo real. Cada evento genera una respuesta clara, permitiendo el seguimiento y control inmediato dentro del entorno.</p>
+    </div>
+    <div class="info-card">
+      <h4>Recompensa integrada</h4>
+      <p>La participación genera valor interno gestionado por la plataforma. Este valor se integra totalmente como un elemento clave del flujo de interacción.</p>
+    </div>
+  </section>
+
+  <section class="grid-container grid-4" aria-label="Métricas">
+    <div class="info-card flow-card">
+      <div class="flow-content"><span class="flow-title">STREAM</span><span class="flow-desc">BASE OPERATIVA</span></div>
+    </div>
+    <div class="info-card flow-card">
+      <div class="flow-content"><span class="flow-title">VIEWERS</span><span class="flow-desc">PARTICIPACIÓN</span></div>
+    </div>
+    <div class="info-card flow-card">
+      <div class="flow-content"><span class="flow-title">INTERACTION</span><span class="flow-desc">EVENTOS</span></div>
+    </div>
+    <div class="info-card flow-card">
+      <div class="flow-content"><span class="flow-title">REWARDS</span><span class="flow-desc">VALOR INTERNO</span></div>
+    </div>
+  </section>
+
+  <footer>© 2026 CARGITX — TODOS LOS DERECHOS RESERVADOS</footer>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const themeBtn = document.getElementById('theme');
+    const bodyElement = document.body;
+    const canvas = document.getElementById('rain-bg');
+    const ctx = canvas.getContext('2d');
+
+    // PERSISTENCIA DE TEMA (CACHE)
+    // 1. Revisar si hay algo guardado
+    const savedTheme = localStorage.getItem('cargitx_theme');
+    if (savedTheme === 'light') {
+        bodyElement.classList.add('light');
+    }
+
+    // 2. Variable de estado para JS
+    let isLightMode = bodyElement.classList.contains('light');
+
+    themeBtn.addEventListener('click', () => {
+        bodyElement.classList.toggle('light');
+        isLightMode = bodyElement.classList.contains('light');
+        // 3. Guardar selección
+        localStorage.setItem('cargitx_theme', isLightMode ? 'light' : 'dark');
+    });
+
+    let w, h, particles = [];
+    const colWidth = 55; 
+
+    function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        createParticles();
+    }
+
+    function createParticles() {
+        const cols = Math.floor(w / colWidth);
+        particles = new Array(cols);
+        for(let i = 0; i < cols; i++) {
+            particles[i] = {
+                x: i * colWidth + (colWidth / 2), 
+                y: Math.random() * h - h, 
+                speed: Math.random() * 1.5 + 0.8,
+                len: Math.random() * 150 + 80, 
+                opacity: Math.random()
+            };
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, w, h);
+        const r = isLightMode ? 37 : 58;
+        const g = isLightMode ? 203 : 214;
+        const b = isLightMode ? 168 : 178;
+        const baseOpacity = isLightMode ? 0.25 : 0.6;
+        
+        const len = particles.length;
+        for(let i = 0; i < len; i++) {
+            let p = particles[i];
+            let finalOpacity = baseOpacity * (0.5 + p.opacity * 0.5);
+            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${finalOpacity})`;
+            ctx.fillRect(p.x, p.y, 2, p.len);
+            p.y += p.speed;
+            if (p.y > h) {
+                p.y = -p.len - (Math.random() * 50); 
+                p.speed = Math.random() * 1.5 + 0.8;
+                p.opacity = Math.random();
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+    window.addEventListener('resize', resize, { passive: true });
+    resize();
+    animate();
+});
+</script>
+</body>
+</html>
