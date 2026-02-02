@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="google" content="notranslate" />
+    
+    <meta name="description" content="Digital platform integrating live streaming, audience interaction, and real-time rewards within a unique robust environment.">
+    <title>CARGITX • Streaming Rewards</title>
+    
+    <meta name="theme-color" content="#050808">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="assets/logo-icon.png"> 
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root{--mint:#3ad6b2;--bg:#050808;--card-bg:#111413;--text:#ffffff;--text-muted:#889995;--border:#232b28;--highlight:#1a211f;--line-base:rgba(58,214,178,0.2);--card-shadow:0 10px 40px rgba(0,0,0,0.3);--hud-glow:0 0 15px rgba(58,214,178,0.25),0 4px 10px rgba(0,0,0,0.2);--text-glow:0 0 8px rgba(58,214,178,0.3);--container-width:1700px;--radius-lg:24px;--radius-md:18px}body.light{--bg:#ffffff;--card-bg:#ffffff;--text:#0b1613;--text-muted:#5a6663;--border:#edf2f0;--mint:#25cba8;--highlight:#ffffff;--line-base:rgba(37,203,168,0.2);--card-shadow:0 10px 30px rgba(0,0,0,0.06);--hud-glow:0 0 8px rgba(37,203,168,0.15),0 2px 4px rgba(0,0,0,0.05);--text-glow:0 0 0 rgba(0,0,0,0)}*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background-color:var(--bg);color:var(--text);line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background-color .3s ease,color .3s ease}#rain-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none}header{position:fixed;top:0;left:0;width:100%;padding:20px 4%;display:flex;justify-content:space-between;align-items:flex-start;z-index:100;pointer-events:none}.brand-box,.controls-container{pointer-events:auto;background:var(--card-bg);border:1px solid var(--border);border-radius:14px;box-shadow:var(--hud-glow);display:flex;align-items:center;transition:box-shadow .3s ease}.brand-box{padding:12px 18px}.brand-box img{height:22px;display:block;width:auto}.controls-container{padding:8px 0;gap:0}.lang-link{color:var(--mint);text-decoration:none;font-weight:800;font-size:13px;padding:0 18px;font-family:'Orbitron',sans-serif;text-shadow:var(--text-glow)}.ctrl-separator{width:1px;height:18px;background-color:var(--border)}.theme-btn{background:transparent;border:none;cursor:pointer;padding:0 18px;display:flex;align-items:center;justify-content:center;color:var(--mint);filter:drop-shadow(0 0 1px rgba(58,214,178,0.4))}.icon-svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.sun-icon{display:block}.moon-icon{display:none}body.light .sun-icon{display:none}body.light .moon-icon{display:block}@media (min-width:1024px){.brand-box{padding:16px 26px}.brand-box img{height:28px}.controls-container{padding:12px 0}.lang-link{font-size:15px;padding:0 24px}.theme-btn{padding:0 24px}.icon-svg{width:24px;height:24px}.ctrl-separator{height:24px}}.main-wrapper{max-width:var(--container-width);margin:0 auto;padding:clamp(100px,12vh,150px) 4% 60px;position:relative;z-index:1}.hero-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:clamp(30px,4vw,70px);display:grid;grid-template-columns:1.4fr 1fr;gap:60px;align-items:center;margin-bottom:80px;box-shadow:var(--card-shadow);contain:content}.hero-left h1{font-family:'Orbitron',sans-serif;font-size:clamp(28px,5vw,68px);line-height:1.1;margin-bottom:20px;font-weight:900;letter-spacing:-1px}.hero-left h1 span{color:var(--mint)}.hero-left p{font-size:clamp(14px,1.1vw,17px);color:var(--text-muted);font-weight:400;max-width:600px;line-height:1.6}.hero-right{display:flex;flex-direction:column;align-items:center;gap:24px}.hero-img{width:100%;max-width:340px;height:auto;object-fit:contain}.scanner-line{width:100%;max-width:340px;height:8px;background:var(--line-base);border-radius:4px;position:relative;overflow:hidden;margin-bottom:10px;box-shadow:0 0 10px rgba(58,214,178,0.2)}.scanner-line::after{content:'';position:absolute;top:0;left:0;width:50%;height:100%;background:linear-gradient(90deg,transparent,var(--mint),transparent);animation:scan-move 2.5s ease-in-out infinite}@keyframes scan-move{0%{transform:translateX(-150%)}100%{transform:translateX(300%)}}.status-row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;width:100%}.status-pill{padding:8px 18px;border-radius:10px;background:var(--highlight);border:1px solid var(--border);font-size:11px;font-weight:800;color:var(--mint);font-family:'Orbitron',sans-serif;letter-spacing:1px;flex:0 1 auto;white-space:nowrap}body.light .status-pill{background:#ffffff;border-color:var(--mint)}.grid-container{display:grid;width:100%}.grid-2{grid-template-columns:repeat(2,1fr);gap:40px;margin-bottom:40px}.grid-3{grid-template-columns:repeat(3,1fr);gap:40px;margin-bottom:40px}.grid-4{grid-template-columns:repeat(4,1fr);gap:30px;margin-bottom:40px}.info-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:32px;height:100%;box-shadow:var(--card-shadow);contain:paint}.info-card h3,.info-card h4{font-family:'Orbitron';color:var(--mint);margin-bottom:12px;font-size:20px;letter-spacing:-.5px}.info-card p{font-size:14px;color:var(--text-muted);line-height:1.6}.flow-card{padding:24px;display:flex;align-items:center;overflow:hidden}.flow-content{width:100%;display:flex;flex-direction:row;justify-content:space-between;align-items:baseline;gap:8px;white-space:nowrap}.flow-title{font-family:'Orbitron';font-size:16px;font-weight:800;color:var(--text);letter-spacing:.5px}.flow-desc{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}footer{text-align:center;padding:40px 0;font-size:11px;color:var(--text-muted);border:none;margin-top:20px;font-weight:500;letter-spacing:.5px}@media (min-width:1400px){.grid-2,.grid-3{gap:60px;margin-bottom:60px}.grid-4{gap:40px}.info-card{padding:40px}}@media (max-width:1200px){.grid-4{grid-template-columns:repeat(2,1fr);gap:24px}}@media (max-width:900px){.hero-card{display:flex;flex-direction:column-reverse;text-align:center;gap:40px;padding:40px 24px;margin-bottom:50px}.hero-left p{margin:0 auto}.grid-2{grid-template-columns:1fr;gap:24px;margin-bottom:30px}.grid-3{grid-template-columns:1fr;gap:24px;margin-bottom:30px}.scanner-line{margin:0 auto 10px}}@media (max-width:600px){.main-wrapper{padding:90px 5% 40px}.grid-4{grid-template-columns:1fr;gap:20px}.hero-left h1{font-size:28px}.info-card{padding:28px}.flow-content{flex-direction:row}}
+</style>
+
+<script>
+    (function() {
+        try {
+            var saved = localStorage.getItem('cargitx_theme');
+            var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+            if (saved === 'light' || (!saved && prefersLight)) {
+                document.documentElement.classList.add('light');
+                window.addEventListener('DOMContentLoaded', function() {
+                    document.body.classList.add('light');
+                });
+            }
+        } catch (e) {}
+    })();
+</script>
+
+</head>
+<body>
+
+<canvas id="rain-bg"></canvas>
+
+<header>
+  <div class="brand-box">
+    <img src="assets/logo.png" alt="CARGITX">
+  </div>
+  <div class="controls-container">
+    <a href="index.html" class="lang-link">ES</a>
+    <div class="ctrl-separator"></div>
+    <button class="theme-btn" id="theme" aria-label="Toggle theme">
+      <svg class="icon-svg sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      <svg class="icon-svg moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+  </div>
+</header>
+
+<main class="main-wrapper">
+  
+  <section class="hero-card" aria-label="Introduction">
+    <div class="hero-left">
+      <h1><span>CARGITX</span><br>Streaming Rewards</h1>
+      <p>Digital platform integrating live streaming and audience interaction within a unique environment, featuring clear processes and real-time tracking.</p>
+    </div>
+    
+    <div class="hero-right">
+      <img src="assets/logo-rect.png" alt="CARGITX Platform" class="hero-img">
+      <div class="scanner-line"></div>
+      
+      <div class="status-row">
+        <div class="status-pill">LIVE</div>
+        <div class="status-pill">INTERACTION</div>
+        <div class="status-pill">PLATFORM</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid-container grid-2" aria-label="Architecture">
+    <article class="info-card">
+      <h3>Platform Architecture</h3>
+      <p>Robust infrastructure designed to support continuous streaming and concurrent events. Prioritizing operational stability, process control, and a structure built for orderly scaling.</p>
+    </article>
+    <article class="info-card">
+      <h3>Unified Experience</h3>
+      <p>A single environment where creators and audiences interact frictionlessly. Centralized management of broadcasting and feedback, maintaining consistency across the ecosystem.</p>
+    </article>
+  </section>
+
+  <section class="grid-container grid-3" aria-label="Features">
+    <div class="info-card">
+      <h4>Active Streaming</h4>
+      <p>Live channels with direct connectivity and stability. Design focused on operational continuity and constant activity visibility.</p>
+    </div>
+    <div class="info-card">
+      <h4>Visible Interaction</h4>
+      <p>Actions reflected on the platform in real-time. Each event generates a clear response, allowing immediate tracking and control within the environment.</p>
+    </div>
+    <div class="info-card">
+      <h4>Integrated Rewards</h4>
+      <p>Engagement generates internal value managed by the platform. This value is fully integrated as a key element of the interaction flow.</p>
+    </div>
+  </section>
+
+  <section class="grid-container grid-4" aria-label="Metrics">
+    <div class="info-card flow-card">
+      <div class="flow-content">
+        <span class="flow-title">STREAM</span>
+        <span class="flow-desc">OPERATIONAL BASE</span>
+      </div>
+    </div>
+    <div class="info-card flow-card">
+      <div class="flow-content">
+        <span class="flow-title">VIEWERS</span>
+        <span class="flow-desc">ENGAGEMENT</span>
+      </div>
+    </div>
+    <div class="info-card flow-card">
+      <div class="flow-content">
+        <span class="flow-title">INTERACTION</span>
+        <span class="flow-desc">EVENTS</span>
+      </div>
+    </div>
+    <div class="info-card flow-card">
+      <div class="flow-content">
+        <span class="flow-title">REWARDS</span>
+        <span class="flow-desc">INTERNAL VALUE</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2026 CARGITX — ALL RIGHTS RESERVED</footer>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const themeBtn = document.getElementById('theme');
+    const bodyElement = document.body;
+    const canvas = document.getElementById('rain-bg');
+    const ctx = canvas.getContext('2d');
+
+    // Sincronizar tema si el script del head lo activó
+    if (document.documentElement.classList.contains('light')) {
+        bodyElement.classList.add('light');
+    }
+
+    themeBtn.addEventListener('click', () => {
+        bodyElement.classList.toggle('light');
+        const isLight = bodyElement.classList.contains('light');
+        try {
+            localStorage.setItem('cargitx_theme', isLight ? 'light' : 'dark');
+        } catch (e) {}
+    });
+
+    // --- LLUVIA GAMER ---
+    let w, h;
+    let particles = [];
+    const colWidth = 45; 
+
+    function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        createParticles();
+    }
+
+    function createParticles() {
+        const cols = Math.floor(w / colWidth);
+        particles = new Array(cols);
+        for(let i = 0; i < cols; i++) {
+            particles[i] = {
+                x: i * colWidth + (colWidth / 2), 
+                y: Math.random() * h, 
+                speed: Math.random() * 1.5 + 0.8,
+                len: Math.random() * 250 + 150, 
+                opacity: Math.random()
+            };
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, w, h);
+        const isLightMode = bodyElement.classList.contains('light');
+        const r = isLightMode ? 37 : 58;
+        const g = isLightMode ? 203 : 214;
+        const b = isLightMode ? 168 : 178;
+        const baseOpacity = isLightMode ? 0.25 : 0.6;
+        
+        const len = particles.length;
+        for(let i = 0; i < len; i++) {
+            let p = particles[i];
+            let finalOpacity = baseOpacity * (0.5 + p.opacity * 0.5);
+            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${finalOpacity})`;
+            ctx.fillRect(p.x, p.y, 2, p.len);
+            p.y += p.speed;
+            
+            if (p.y > h) {
+                p.y = -p.len; 
+                p.speed = Math.random() * 1.5 + 0.8;
+                p.opacity = Math.random();
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+    window.addEventListener('resize', resize, { passive: true });
+    resize();
+    animate();
+});
+</script>
+</body>
+</html>
